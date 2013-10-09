@@ -40,6 +40,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "adb.h"
+#include "debug.h"
 
 
 static inline void data_lo(void);
@@ -82,6 +83,12 @@ bool adb_host_psw(void)
 }
 #endif
 
+/*
+ * Don't call this in a row without the delay, otherwise it makes some of poor controllers
+ * overloaded and misses strokes. Recommended delay is 16ms.
+ *
+ * Thanks a lot, blargg! <http://geekhack.org/index.php?topic=14290.msg1068919#msg1068919>
+ */
 uint16_t adb_host_kbd_recv(void)
 {
     uint16_t data = 0;
@@ -93,6 +100,7 @@ uint16_t adb_host_kbd_recv(void)
     }
     if (!read_bit()) {          // Startbit(1)
         // Service Request
+        dprintf("Startbit ERROR\n");
         return -2;
     }
 
@@ -104,6 +112,7 @@ uint16_t adb_host_kbd_recv(void)
     sei();
 
     if (stop) {
+        dprintf("Stopbit ERROR\n");
         return -3;
     }
     return data;

@@ -109,6 +109,9 @@ colemak: all
 workman: OPT_DEFS += -DKEYMAP_WORKMAN
 workman: all
 
+micro: OPT_DEFS += -DKEYMAP_MICRO
+micro: all
+
 cub: OPT_DEFS += -DKEYMAP_CUB
 cub: all
 
