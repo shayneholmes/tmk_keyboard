@@ -39,7 +39,7 @@
 #----------------------------------------------------------------------------
 
 # Target file name (without extension).
-TARGET = ergodox_pjrc
+TARGET = ergodox_lufa
 
 # Directory common source filess exist
 TOP_DIR = ../..
@@ -71,6 +71,28 @@ MCU = atmega32u4
 F_CPU = 16000000
 
 
+#
+# LUFA specific
+#
+# Target architecture (see library "Board Types" documentation).
+ARCH = AVR8
+
+# Input clock frequency.
+#     This will define a symbol, F_USB, in all source code files equal to the
+#     input clock frequency (before any prescaling is performed) in Hz. This value may
+#     differ from F_CPU if prescaling is used on the latter, and is required as the
+#     raw input clock is fed directly to the PLL sections of the AVR for high speed
+#     clock generation for the USB and other AVR subsections. Do NOT tack on a 'UL'
+#     at the end, this will be done automatically to create a 32-bit value in your
+#     source code.
+#
+#     If no clock division is performed on the input clock inside the AVR (via the
+#     CPU clock adjust registers or the clock division fuses), this will be equal to F_CPU.
+F_USB = $(F_CPU)
+
+# Interrupt driven control endpoint task
+OPT_DEFS += -DINTERRUPT_CONTROL_ENDPOINT
+
 # Boot Section Size in *bytes*
 #   Teensy halfKay   512
 #   Atmel DFU loader 4096
@@ -87,7 +109,7 @@ EXTRAKEY_ENABLE = yes	# Audio control and System control(+600)
 CONSOLE_ENABLE = yes    # Console for debug
 COMMAND_ENABLE = yes    # Commands for debug and configuration
 SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
-NKRO_ENABLE = yes	# USB Nkey Rollover(+500)
+NKRO_ENABLE = yes		# USB Nkey Rollover (+500)
 #PS2_MOUSE_ENABLE = yes	# PS/2 mouse(TrackPoint) support
 INVERT_NUMLOCK = yes 	# invert state of NumLock led
 
@@ -96,7 +118,8 @@ INVERT_NUMLOCK = yes 	# invert state of NumLock led
 VPATH += $(TARGET_DIR)
 VPATH += $(TOP_DIR)
 
-include $(TOP_DIR)/protocol/pjrc.mk
+include $(TOP_DIR)/protocol.mk
+include $(TOP_DIR)/protocol/lufa.mk
 include $(TOP_DIR)/common.mk
 include $(TOP_DIR)/rules.mk
 
