@@ -169,14 +169,14 @@ uint8_t matrix_scan(void)
 #ifdef KEYMAP_SIMON
     uint8_t layer = biton32(layer_state);
 
-    ergodox_board_led_off();
+    ergodox_led_all_off();
     switch (layer) {
         case 0:
 // none
             
             break;
         default:
-            ergodox_board_led_on();
+            ergodox_led_all_on();
             break;
     }
 #endif
