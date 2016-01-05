@@ -112,6 +112,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // PLOVER (SPECIAL CASE)
 
+    #define LAYER_PLOVER 4
     KEYMAP(  // layout: layer 4: Steno for Plover
         // left hand
         FN5, NO,  NO,  NO,  NO,  NO,  NO,  
@@ -156,6 +157,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // MODIFIERS THAT MIGHT BE STICKY
 
+    #define LAYER_NUMPAD 6
     KEYMAP(  // layout: layer 6: mouse + numpad
         // left hand
         FN0, NO,  NO,  NO,  NO,  PAUS,PSCR,
@@ -197,6 +199,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TRNS, TRNS,RSFT,RCTL
     ),
 
+    #define LAYER_BLUESHIFT 8
     KEYMAP(  // layout: layer 8: "BlueShift"
         // left hand
         FN0, F1,  F2,  F3,  F4,  F5,  F6,
@@ -283,6 +286,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         FN8, FN8, FN8
     ),
 
+    #define LAYER_FKEYS 12
     KEYMAP(  // layout: layer 12: F-keys only
         // left hand
         FN0, NO,  NO,  NO,  NO,  NO,  NO,  
@@ -371,9 +375,9 @@ enum macro_id {
  */
 static const uint16_t PROGMEM fn_actions[] = {
     ACTION_LAYER_SET(0, ON_PRESS),                  // FN0 - reset layer to just 0
-    ACTION_LAYER_TAP_TOGGLE(8),                     // FN1 - switch to BlueShift
+    ACTION_LAYER_TAP_TOGGLE(LAYER_BLUESHIFT),       // FN1 - switch to BlueShift
     ACTION_LAYER_TAP_TOGGLE(7),                     // FN2 - movement tap/toggle
-    ACTION_LAYER_TAP_TOGGLE(6),                     // FN3 - numpad
+    ACTION_LAYER_TAP_TOGGLE(LAYER_NUMPAD),          // FN3 - numpad
     ACTION_FUNCTION(UNUSED),                        // ** FN4 - unused
     ACTION_FUNCTION(PLOVER_SWITCH),                 // FN5 - toggle Plover
     ACTION_FUNCTION(UNUSED),                        // ** FN6 - unused
@@ -427,14 +431,14 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     // print("opt = "); phex(opt); print("\n");
     if (id == PLOVER_SWITCH) {
         action_t action = { .code = ACTION_NO };
-        action.code = ACTION_KEY((layer_state & 1<<4) ? KC_F23 : KC_F24);
+        action.code = ACTION_KEY((layer_state & 1<<LAYER_PLOVER) ? KC_F23 : KC_F24);
         if (!event.pressed) {
             uint8_t savedmods = get_mods();
             uint8_t shiftpressed = (savedmods & (MOD_LSFT | MOD_RSFT));
             if (shiftpressed) {
-                layer_off(4); // shift+plover is a signal to AHK to restart Plover, so don't toggle the plover layer
+                layer_off(LAYER_PLOVER); // shift+plover is a signal to AHK to restart Plover, so don't toggle the plover layer
             } else {
-                layer_invert(4);
+                layer_invert(LAYER_PLOVER);
             }
             //clear_mods();
         }
@@ -549,17 +553,17 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     else if (id == FKEY_SWITCH) {
         uint8_t row = event.key.row;
         if (event.pressed) {
-            layer_on(12);
+            layer_on(LAYER_FKEYS);
         }
         else {
             if (
-                    ((row == 0) && (layer_state & 1<<6)) // left button and from numpad; out-of-order release
-                 || ((row == 1) && (layer_state & 1<<8)) // right button and from BlueShift; out-of-order release
+                    ((row == 0) && (layer_state & 1<<LAYER_NUMPAD)) // left button and from numpad; out-of-order release
+                 || ((row == 1) && (layer_state & 1<<LAYER_BLUESHIFT)) // right button and from BlueShift; out-of-order release
                ) { 
-                layer_invert(6);
-                layer_invert(8);
+                layer_invert(LAYER_NUMPAD);
+                layer_invert(LAYER_BLUESHIFT);
             }
-            layer_off(12);
+            layer_off(LAYER_FKEYS);
         }
     }
 }
