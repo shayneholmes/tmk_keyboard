@@ -26,7 +26,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // BASE LAYERS
 
-    KEYMAP(  // layout: layer 0: customized dvorak with symbol row switched
+    KEYMAP(  // layer 0: customized dvorak with symbol row switched
         // left hand
         ESC, FN12,FN12,FN12,FN12,FN12,F17,
         TAB, QUOT,COMM,DOT, P,   Y,   FN2,
@@ -47,7 +47,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ENT, FN1, SPC
     ),
 
-    KEYMAP(  // layout: layer 1: transparent because this gets triggered more than I'd like
+    KEYMAP(  // layer 1: transparent because this gets triggered more than I'd like
         // left hand
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
@@ -68,7 +68,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TRNS,TRNS,TRNS
     ),
 
-    KEYMAP(  // layout: layer 2: customized dvorak
+    KEYMAP(  // layer 2: customized dvorak
         // left hand
         ESC, 1,   2,   3,   4,   5,   BSLS,
         TAB, QUOT,COMM,DOT, P,   Y,   FN2,
@@ -113,7 +113,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // PLOVER (SPECIAL CASE)
 
     #define LAYER_PLOVER 4
-    KEYMAP(  // layout: layer 4: Steno for Plover
+    KEYMAP(  // layer 4: Steno for Plover
         // left hand
         FN5, NO,  NO,  NO,  NO,  NO,  NO,  
         NO,  1,   2,   3,   4,   5,   NO,  
@@ -134,7 +134,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         NO,  N,   M   
     ),
 
-    KEYMAP(  // layout: layer 5: reserved
+    KEYMAP(  // layer 5: reserved
         // left hand
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
@@ -158,7 +158,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // MODIFIERS THAT MIGHT BE STICKY
 
     #define LAYER_NUMPAD 6
-    KEYMAP(  // layout: layer 6: mouse + numpad
+    KEYMAP(  // layer 6: mouse + numpad
         // left hand
         FN0, NO,  NO,  NO,  NO,  PAUS,PSCR,
         TRNS,NO,  WH_U,MS_U,WH_D,BTN2,TRNS,
@@ -179,7 +179,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ENT, TRNS,TRNS
     ),
 
-    KEYMAP(  // layout: layer 7: F-keys + cursor
+    KEYMAP(  // layer 7: F-keys + cursor
         // left hand
         FN0, F1,  F2,  F3,  F4,  F5,  F6,
         BTLD,NO,  PGUP,UP,  PGDN,NO,  TRNS,
@@ -200,7 +200,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     #define LAYER_BLUESHIFT 8
-    KEYMAP(  // layout: layer 8: "BlueShift"
+    KEYMAP(  // layer 8: "BlueShift"
         // left hand
         FN0, F1,  F2,  F3,  F4,  F5,  F6,
         TRNS,FN12,FN12,FN12,PSCR,BSLS,TRNS,  // the FN12 entries are for tilde and inverted brace/bracket keys
@@ -221,7 +221,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TRNS,TRNS,TRNS
     ),
 
-    KEYMAP(  // layout: layer 9: reserved
+    KEYMAP(  // layer 9: reserved
         // left hand
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
@@ -242,7 +242,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TRNS,TRNS,TRNS
     ),
 
-    KEYMAP(  // layout: layer 10: reserved
+    KEYMAP(  // layer 10: reserved
         // left hand
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
@@ -265,7 +265,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // MODIFIERS THAT WON'T BE STICKY
 
-    KEYMAP(  // layout: layer 11: Special function-driven commands (any-key)
+    KEYMAP(  // layer 11: Special function-driven commands (any-key)
         // left hand
         FN8, FN8, FN8, FN8, FN8, FN8, FN8, 
         FN8, FN8, FN8, FN8, FN8, FN8, FN8, 
@@ -287,7 +287,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     #define LAYER_FKEYS 12
-    KEYMAP(  // layout: layer 12: F-keys only
+    KEYMAP(  // layer 12: F-keys only
         // left hand
         FN0, NO,  NO,  NO,  NO,  NO,  NO,  
         TRNS,F13, F14, F15, F16, NO,  TRNS,
@@ -311,7 +311,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // TEMPLATES
 
 /*
-    KEYMAP(  // layout: layer N: transparent on edges, all others are empty
+    KEYMAP(  // layer N: transparent on edges, all others are empty
         // left hand
         TRNS,NO,  NO,  NO,  NO,  NO,  NO,  
         TRNS,NO,  NO,  NO,  NO,  NO,  TRNS,
@@ -331,7 +331,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TRNS,
         TRNS,RSFT,RCTL
     ),
-    KEYMAP(  // layout: layer N: fully transparent
+    KEYMAP(  // layer N: fully transparent
         // left hand
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
