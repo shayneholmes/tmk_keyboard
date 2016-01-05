@@ -47,7 +47,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ENT, FN1, SPC
     ),
 
-    KEYMAP(  // layout: layer 1: transparent (this gets triggered more than I'd like)
+    KEYMAP(  // layout: layer 1: transparent because this gets triggered more than I'd like
         // left hand
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
@@ -358,6 +358,7 @@ enum function_id {
     PLOVER_SWITCH,
     SHIFT_SWITCH,
     FKEY_SWITCH,
+    UNUSED,
 };
 
 enum macro_id {
@@ -370,20 +371,20 @@ enum macro_id {
  * Fn action definition
  */
 static const uint16_t PROGMEM fn_actions[] = {
-    ACTION_LAYER_SET(0, ON_PRESS),                  // FN0 - set layer0 only
+    ACTION_LAYER_SET(0, ON_PRESS),                  // FN0 - reset layer to just 0
     ACTION_LAYER_TAP_TOGGLE(8),                     // FN1 - switch to BlueShift
     ACTION_LAYER_TAP_TOGGLE(7),                     // FN2 - movement tap/toggle
     ACTION_LAYER_TAP_TOGGLE(6),                     // FN3 - numpad
     ACTION_FUNCTION(TEENSY_KEY),                    // FN4 - Teensy key
-    ACTION_FUNCTION(PLOVER_SWITCH),                 // FN5 - enable Plover
-    ACTION_FUNCTION(PLOVER_SWITCH),                 // ** FN6 - suspend Plover (OUT OF USE)
-    ACTION_LAYER_MOMENTARY(11),                     // ** FN7 - Trigger the AnyKey layer (OUT OF USE)
+    ACTION_FUNCTION(PLOVER_SWITCH),                 // FN5 - toggle Plover
+    ACTION_FUNCTION(UNUSED),                        // ** FN6 - unused
+    ACTION_FUNCTION(UNUSED),                        // ** FN7 - unused
     ACTION_FUNCTION(ANY_KEY),                       // FN8 - AnyKey functional layer
-    ACTION_MODS_TAP_TOGGLE(MOD_LSFT),               // ** FN9 - tap toggle shift (OUT OF USE)
+    ACTION_FUNCTION(UNUSED),                        // ** FN9 - unused
     ACTION_MACRO(MACRO_PASSWORD1),                  // FN10 - password1
     ACTION_MACRO(MACRO_PASSWORD2),                  // FN11 - password2
     ACTION_FUNCTION(SHIFT_SWITCH),                  // FN12 - symbolized number row
-    ACTION_FUNCTION(FKEY_SWITCH),                   // FN13 - trigger Fkey layer and get rid of it appropriately
+    ACTION_FUNCTION(FKEY_SWITCH),                   // FN13 - Two-button Fkey layer requires special logic to get rid of it appropriately
 };
 
 void simon_hotkey(keyrecord_t *record, action_t action)
@@ -439,7 +440,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
             uint8_t savedmods = get_mods();
             uint8_t shiftpressed = (savedmods & (MOD_LSFT | MOD_RSFT));
             if (shiftpressed) {
-                layer_off(4); // shift+plover is to reset, so don't toggle the plover layer
+                layer_off(4); // shift+plover is a signal to AHK to restart Plover, so don't toggle the plover layer
             } else {
                 layer_invert(4);
             }
