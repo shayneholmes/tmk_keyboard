@@ -180,7 +180,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(  // layout: layer 7: F-keys + cursor
         // left hand
         FN0, F1,  F2,  F3,  F4,  F5,  F6,
-        FN4, NO,  PGUP,UP,  PGDN,NO,  TRNS,
+        BTLD,NO,  PGUP,UP,  PGDN,NO,  TRNS,
         TRNS,HOME,LEFT,DOWN,RGHT,END, 
         TRNS,NO,  NO,  END, HOME,NO,  TRNS,
         TRNS,TRNS,TRNS,FN10,FN11,
@@ -189,7 +189,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                  LCTL,LSFT,TRNS,
         // right hand
              F7,  F8,  F9,  F10, F11, F12, MINS,
-             TRNS,NO,  PGUP,UP,  PGDN, NO,  FN4,
+             TRNS,NO,  PGUP,UP,  PGDN, NO, BTLD,
                   HOME,LEFT,DOWN,RGHT,END, TRNS,
              TRNS,NO,  NO,  NO,  NO,  NO,  TRNS,
                        RGUI,RALT,TRNS,TRNS,TRNS,
@@ -353,7 +353,6 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* id for user defined functions */
 enum function_id {
-    TEENSY_KEY,
     ANY_KEY,
     PLOVER_SWITCH,
     SHIFT_SWITCH,
@@ -375,7 +374,7 @@ static const uint16_t PROGMEM fn_actions[] = {
     ACTION_LAYER_TAP_TOGGLE(8),                     // FN1 - switch to BlueShift
     ACTION_LAYER_TAP_TOGGLE(7),                     // FN2 - movement tap/toggle
     ACTION_LAYER_TAP_TOGGLE(6),                     // FN3 - numpad
-    ACTION_FUNCTION(TEENSY_KEY),                    // FN4 - Teensy key
+    ACTION_FUNCTION(UNUSED),                        // ** FN4 - unused
     ACTION_FUNCTION(PLOVER_SWITCH),                 // FN5 - toggle Plover
     ACTION_FUNCTION(UNUSED),                        // ** FN6 - unused
     ACTION_FUNCTION(UNUSED),                        // ** FN7 - unused
@@ -426,14 +425,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     // print("action_function called\n");
     // print("id  = "); phex(id); print("\n");
     // print("opt = "); phex(opt); print("\n");
-    if (id == TEENSY_KEY) {
-        clear_keyboard();
-        print("\n\nJump to bootloader...");
-        _delay_ms(250);
-        bootloader_jump(); // should not return
-        print("not supported.\n");
-    }
-    else if (id == PLOVER_SWITCH) {
+    if (id == PLOVER_SWITCH) {
         action_t action = { .code = ACTION_NO };
         action.code = ACTION_KEY((layer_state & 1<<4) ? KC_F23 : KC_F24);
         if (!event.pressed) {
