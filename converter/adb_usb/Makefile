@@ -42,7 +42,7 @@
 TARGET = adb_usb_lufa
 
 # Directory common source filess exist
-TOP_DIR = ../..
+TMK_DIR = ../../tmk_core
 
 # Directory keyboard dependent files exist
 TARGET_DIR = .
@@ -63,8 +63,10 @@ CONFIG_H = config.h
 
 
 # MCU name
-#MCU = at90usb1287
-MCU = atmega32u4
+# atmega32u4 	Teensy2.0
+# atemga32u4	TMK Converter rev.1
+# atemga32u2	TMK Converter rev.2
+MCU = atmega32u2
 
 # Processor frequency.
 #     This will define a symbol, F_CPU, in all source code files equal to the
@@ -106,7 +108,7 @@ OPT_DEFS += -DINTERRUPT_CONTROL_ENDPOINT
 # Boot Section Size in *bytes*
 #   Teensy halfKay   512
 #   Teensy++ halfKay 1024
-#   Atmel DFU loader 4096
+#   Atmel DFU loader 4096	for TMK Converter rev.1/rev.2
 #   LUFA bootloader  4096
 #   USBaspLoader     2048
 OPT_DEFS += -DBOOTLOADER_SIZE=4096
@@ -122,6 +124,10 @@ CONSOLE_ENABLE = yes	# Console for debug(+400)
 COMMAND_ENABLE = yes    # Commands for debug and configuration
 #SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
 #NKRO_ENABLE = yes	# USB Nkey Rollover
+ADB_MOUSE_ENABLE = yes
+
+# ADB Mice need acceleration for todays much bigger screens. 
+OPT_DEFS += -DADB_MOUSE_MAXACC=8
 
 
 # Optimize size but this may cause error "relocation truncated to fit"
@@ -129,9 +135,9 @@ COMMAND_ENABLE = yes    # Commands for debug and configuration
 
 # Search Path
 VPATH += $(TARGET_DIR)
-VPATH += $(TOP_DIR)
+VPATH += $(TMK_DIR)
 
-include $(TOP_DIR)/protocol/lufa.mk
-include $(TOP_DIR)/protocol.mk
-include $(TOP_DIR)/common.mk
-include $(TOP_DIR)/rules.mk
+include $(TMK_DIR)/protocol/lufa.mk
+include $(TMK_DIR)/protocol.mk
+include $(TMK_DIR)/common.mk
+include $(TMK_DIR)/rules.mk
