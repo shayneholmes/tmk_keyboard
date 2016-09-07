@@ -54,7 +54,7 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
  * Fn action definition
  */
 #ifdef KEYMAP_SECTION_ENABLE
-const uint16_t fn_actions[] __attribute__ ((section (".keymap.fn_actions"))) = {
+const action_t fn_actions[] __attribute__ ((section (".keymap.fn_actions"))) = {
     [0]  = ACTION_LAYER_MOMENTARY(1),
     [1]  = ACTION_LAYER_MOMENTARY(2),
     [2]  = ACTION_LAYER_MOMENTARY(3),
@@ -68,9 +68,9 @@ const uint16_t fn_actions[] __attribute__ ((section (".keymap.fn_actions"))) = {
     [10] = ACTION_LAYER_TAP_TOGGLE(1),
     [11] = ACTION_LAYER_TAP_TOGGLE(2),
     [12] = ACTION_LAYER_TAP_TOGGLE(3),
-    [13] = ACTION_LAYER_TAP_KEY(1, KC_A),
-    [14] = ACTION_LAYER_TAP_KEY(2, KC_F),
-    [15] = ACTION_LAYER_TAP_KEY(3, KC_J),
+    [13] = ACTION_LAYER_TAP_KEY(1, KC_BSLASH),
+    [14] = ACTION_LAYER_TAP_KEY(2, KC_TAB),
+    [15] = ACTION_LAYER_TAP_KEY(3, KC_ENTER),
     [16] = ACTION_LAYER_TAP_KEY(4, KC_SPACE),
     [17] = ACTION_LAYER_TAP_KEY(5, KC_SCOLON),
     [18] = ACTION_LAYER_TAP_KEY(6, KC_QUOTE),
@@ -89,7 +89,7 @@ const uint16_t fn_actions[] __attribute__ ((section (".keymap.fn_actions"))) = {
     [31] = ACTION_MODS_TAP_KEY(MOD_RSFT, KC_BSLASH),
 };
 #else
-const uint16_t fn_actions[] PROGMEM = {
+const action_t fn_actions[] PROGMEM = {
     [0]  = ACTION_LAYER_MOMENTARY(1),
 };
 #endif

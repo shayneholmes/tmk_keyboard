@@ -3,9 +3,9 @@ Keymap framework - how to define your keymap
 ***NOTE: This is not final version, may be inconsistent with source code and changed occasionally for a while.***
 
 ## 0. Keymap and layers
-**Keymap** is comprised of multiple layers of key layout, you can define **32 layers** at most.
-**Layer** is an array of **keycodes** to define **actions** for each physical keys.
-respective layers can be validated simultaneously. Layers are indexed with 0 to 31 and higher layer has precedence.
+The **keymap** is an array composed of one or more layers.
+Each **layer** is an array of **keycodes**, defining **actions** for each physical key.
+Layers can be activated and deactivated independently. Multiple layers may be active at once, resulting in the currently-active **layer state**. Each layer has an index between 0-31. As active layers are stacked together, higher layers take precedence over lower layers.
 
     Keymap: 32 Layers                   Layer: Keycode matrix
     -----------------                   ---------------------
@@ -21,31 +21,17 @@ respective layers can be validated simultaneously. Layers are indexed with 0 to 
        1 /___________// |               1 `--------------------------
        0 /___________/  V low           0 `--------------------------
 
+**Note:** The keymap array is limited to **32 layers**.
 
 
-### 0.1 Keymap status
-Keymap has its state in two parameters:
-**`default_layer`** indicates a base keymap layer(0-31) which is always valid and to be referred, **`keymap_stat`** is 16bit variable which has current on/off status of layers on its each bit.
 
-Keymap layer '0' is usually `default_layer` and which is the only valid layer and other layers is initially off after boot up firmware, though, you can configured them in `config.h`.
-To change `default_layer` will be useful when you switch key layout completely, say you want Colmak instead of Qwerty.
+### 0.1 Layer state
+The current keymap layer state is determined by two parameters: the *default layer*, and the individual *layer states*. Changing the default layer is useful for switching key layouts completely; for example, switching to Dvorak, Colemak or Workman instead of QWERTY. Individual layer states, on the other hand, can be used to overlay the base layer with other functions such as navigation keys, function keys (F1-F12), media keys or other actions.
 
-    Initial state of Keymap          Change base layout              
-    -----------------------          ------------------              
+Because the default layer is really just a special case affecting the overall layer state, it is important to first understand how the layer state is determined.
 
-      31                               31
-      30                               30
-      29                               29
-       :                                :
-       :                                :   ____________
-       2   ____________                 2  /           /
-       1  /           /              ,->1 /___________/
-    ,->0 /___________/               |  0
-    |                                |
-    `--- default_layer = 0           `--- default_layer = 1
-         layer_state   = 0x00000001       layer_state   = 0x00000002
-
-On the other hand, you shall change `layer_state` to overlay base layer with some layers for feature such as navigation keys, function key(F1-F12), media keys or special actions.
+#### 0.1.1 The layer state
+The **layer state** indicates the current on/off status of all layers. It is defined in the firmware by a 32-bit integer, `layer_state`, which stores each layer's on/off status in a single bit: 0 for off, 1 for on. As layers are activated and deactivated, their respective bits are flipped, changing the value of `layer_state`.
 
     Overlay feature layer
     ---------------------      bit|status
@@ -62,32 +48,68 @@ On the other hand, you shall change `layer_state` to overlay base layer with som
     `--- default_layer = 1            |
          layer_state   = 0x60000002 <-'
 
+#### 0.1.2 The default layer
+The **default layer** is the base keymap layer (0-31) which is always active and considered the "bottom" of the stack. When the firmware boots, the default layer is the only active layer. It is set to layer 0 by default, though this can be changed ~~in *config.h*~~ via Boot Magic settings.
+
+    Initial state of Keymap          Change base layout
+    -----------------------          ------------------
+
+      31                               31
+      30                               30
+      29                               29
+       :                                :
+       :                                :   ____________
+       2   ____________                 2  /           /
+       1  /           /              ,->1 /___________/
+    ,->0 /___________/               |  0
+    |                                |
+    `--- default_layer = 0           `--- default_layer = 1
+         layer_state   = 0x00000001       layer_state   = 0x00000002
+
+Note that the `default_layer_state` variable only determines the lowest value to which `layer_state` may be set, and that `default_layer_state` is used by the core firmware when determining the starting value of `layer_state` before applying changes. In other words, the default layer will *always* be set to *on* in `layer_state`.
+
+The default layer is defined in the firmware by the `default_layer_state` variable, which is identical in format to the `layer_state` variable exlpained above. The value may be changed using the following functions:
+
+- `default_layer_state_set(state)` sets the state to the specified 32-bit integer value.
+- AND/OR/XOR functions set the state based on a boolean logic comparison between the current state and the specified 32-bit integer value:
+    - `default_layer_state_and(state)`
+    - `default_layer_state_or(state)`
+    - `default_layer_state_xor(state)`
+
+For example, to set layer 3 as the default layer:
+
+```C
+// convert 3 to a 32-bit unsigned long value, and set the default layer
+default_layer_state_set(1UL<<3);
+```
+
 
 
 ### 0.2 Layer Precedence and Transparency
-Note that ***higher layer has higher priority on stack of layers***, namely firmware falls down from top layer to bottom to look up keycode. Once it spots keycode other than **`KC_TRNS`**(transparent) on a layer it stops searching and lower layers aren't referred.
+Note that ***higher layers have priority in the layer stack***. The firmware starts at the topmost active layer, and works down to the bottom to find the an active keycode. Once the search encounters any keycode other than **`KC_TRNS`** (transparent) on an active layer, the search is halted and the remaining lower layers aren't examined, even if they are active.
 
-You can place `KC_TRNS` on overlay layer changes just part of layout to fall back on lower or base layer.
-Key with `KC_TRANS` doesn't has its own keycode and refers to lower valid layers for keycode, instead.
-See example below.
+**Note:** a layer must be activated before it may be included in the stack search.
+
+`KC_TRNS` is a special placeholder which can be used on overlay layers. This allows for the creation of "partial" layers which fall back on the lower layers, eliminating a good deal of repetition in keymap files.
+
 
 
 ### 0.3 Keymap Example
-Keymap is **`keymaps[]`** C array in fact and you can define layers in it with **`KEYMAP()`** C macro and keycodes. To use complex actions you need to define `Fn` keycode in **`fn_actions[]`** array.
+The keymap is defined in the **`uint8_t keymaps[]`** array, a 2-dimensional array of rows and columns corresponding to positions in the keyboard matrix. But most often the layers are defined using C macros to allow for easier reading and editing of the keymap files. To use complex actions you need to define `Fn` action in the **`action_t fn_actions[]`** array.
 
-This is a keymap example for [HHKB](http://en.wikipedia.org/wiki/Happy_Hacking_Keyboard) keyboard.
-This example has three layers, 'Qwerty' as base layer, 'Cursor' and  'Mousekey'.
+This is a keymap example for the [HHKB](http://en.wikipedia.org/wiki/Happy_Hacking_Keyboard) keyboard.
+This example has three layers: the QWERTY base layer, and two overlay layers for cursor and mousekey control, respectively.
 In this example,
 
- `Fn0` is a **momentary layer switching** key, you can use keys on Cursor layer while holding the key.
+ `Fn0` is a **momentary layer switching** key--you can use keys on the Cursor layer while holding the key.
 
- `Fn1` is a momentary layer switching key with tapping feature, you can get semicolon **';'** with taping the key and switch layers while holding the key. The word **'tap'** or **'tapping'** mean to press and release a key quickly.
+ `Fn1` is a momentary layer switching key with tapping function--tapping the key as one would normally use it, sends the semicolon **';'** keycode, while holding the key down switches layers.
 
- `Fn2` is a **toggle layer switch** key, you can stay switched layer after releasing the key unlike momentary switching.
+ `Fn2` is a **toggle layer switch** key--pressing the key toggles the layer on until you press it again.
 
 You can find other keymap definitions in file `keymap.c` located on project directories.
 
-    static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         /* 0: Qwerty
          * ,-----------------------------------------------------------.
          * |Esc|  1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|  \|  `|
@@ -145,7 +167,7 @@ You can find other keymap definitions in file `keymap.c` located on project dire
                     LGUI,LALT,          BTN1,               RALT,TRNS),
     };
 
-    static const uint16_t PROGMEM fn_actions[] = {
+    const action_t PROGMEM fn_actions[] = {
         ACTION_LAYER_MOMENTARY(1),                  // FN0
         ACTION_LAYER_TAP_KEY(2, KC_SCLN),           // FN1
         ACTION_LAYER_TOGGLE(2),                     // FN2
@@ -192,7 +214,7 @@ There are 8 modifiers which has discrimination between left and right.
 - `KC_WSCH`, `KC_WHOM`, `KC_WBAK`, `KC_WFWD`, `KC_WSTP`, `KC_WREF`, `KC_WFAV` for web browser operation
 
 ### 1.5 Fn key
-`KC_FNnn` are keycodes for `Fn` key which not given any actions at the beginning unlike most of keycodes has its own inborn action. To use these keycodes in `KEYMAP()` you need to assign action you want at first. Action of `Fn` key is defined in `fn_actions[]` and its index of the array is identical with number part of `KC_FNnn`. Thus `KC_FN0` keycode indicates the action defined in first element of the array. ***32 `Fn` keys can be defined at most.***
+`KC_FNnn` are keycodes for `Fn` key which not given any actions at the beginning unlike most of keycodes has its own inborn action. To use these keycodes in `KEYMAP()` you need to assign action you want at first. Action of `Fn` key is defined in `action_t fn_actions[]` and its index of the array is identical with number part of `KC_FNnn`. Thus `KC_FN0` keycode indicates the action defined in first element of the array. ***32 `Fn` keys can be defined at most.***
 
 ### 1.6 Keycode Table
  See keycode table in [`doc/keycode.txt`](./keycode.txt) for description of keycodes.
@@ -368,17 +390,37 @@ Default Layer also has bitwise operations, they are executed when key is release
     MACRO( I(255), T(H), T(E), T(L), T(L), W(255), T(O), END )
 
 #### 2.3.1 Macro Commands
+- **MACRO()**
+- **MACRO_NONE**
+
 - **I()**   change interval of stroke.
 - **D()**   press key
 - **U()**   release key
 - **T()**   type key(press and release)
 - **W()**   wait
+- **SM()**  store modifier state
+- **RM()**  restore modifier state
+- **CM()**  clear modifier state
 - **END**   end mark
 
 #### 2.3.2 Examples
+***TBD***
 
-***TODO: sample implementation***
-See `keyboard/hhkb/keymap.c` for sample.
+    const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
+    {
+        switch (id) {
+            case HELLO:
+                return (record->event.pressed ?
+                        MACRO( I(0), T(H), T(E), T(L), T(L), W(255), T(O), END ) :
+                        MACRO_NONE );
+            case ALT_TAB:
+                return (record->event.pressed ?
+                        MACRO( D(LALT), D(TAB), END ) :
+                        MACRO( U(TAB), END ));
+        }
+        return MACRO_NONE;
+    }
+
 
 
 
@@ -401,7 +443,7 @@ To define tappable `Function` action in keymap use this.
 #### 2.4.3 Implement user function
 `Function` actions can be defined freely with C by user in callback function:
 
-    void keymap_call_function(keyrecord_t *event, uint8_t id, uint8_t opt)
+    void action_function(keyrecord_t *record, uint8_t id, uint8_t opt);
 
 This C function is called every time key is operated, argument `id` selects action to be performed and `opt` can be used for option. Function `id` can be 0-255 and `opt` can be 0-15.
 
@@ -556,13 +598,13 @@ Legacy Keymap uses two arrays `fn_layer[]` and `fn_keycode[]` to define Fn key. 
 
 In following setting example, `Fn0`, `Fn1` and `Fn2` switch layer to 1, 2 and 2 respectively. `Fn2` registers `Space` key when tapping while `Fn0` and `Fn1` doesn't send any key.
 
-    static const uint8_t PROGMEM fn_layer[] = {
+    const uint8_t PROGMEM fn_layer[] = {
         1,              // Fn0
         2,              // Fn1
         2,              // Fn2
     };
 
-    static const uint8_t PROGMEM fn_keycode[] = {
+    const uint8_t PROGMEM fn_keycode[] = {
         KC_NO,          // Fn0
         KC_NO,          // Fn1
         KC_SPC,         // Fn2

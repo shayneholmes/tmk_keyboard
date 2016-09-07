@@ -13,3 +13,6 @@ keymap_simon_passwords.h
 *~
 build/
 *.bak
+.DS_Store
+!converter/*/binary/*.hex
+!keyboard/*/binary/*.hex

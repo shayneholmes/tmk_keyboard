@@ -98,9 +98,9 @@ const uint8_t keymaps[][MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
  * Fn action definition
  */
 #ifdef KEYMAP_SECTION_ENABLE
-const uint16_t fn_actions[] __attribute__ ((section (".keymap.fn_actions"))) = {
+const action_t fn_actions[] __attribute__ ((section (".keymap.fn_actions"))) = {
 #else
-const uint16_t fn_actions[] PROGMEM = {
+const action_t fn_actions[] PROGMEM = {
 #endif
     [0]  = ACTION_LAYER_MOMENTARY(1),
     [1]  = ACTION_LAYER_MOMENTARY(2),
@@ -133,5 +133,5 @@ const uint16_t fn_actions[] PROGMEM = {
     [28] = ACTION_MODS_TAP_KEY(MOD_LSFT, KC_BSPACE),
     [29] = ACTION_MODS_ONESHOT(MOD_LSFT),
     [30] = ACTION_MODS_TAP_KEY(MOD_RSFT, KC_GRAVE),
-    [31] = ACTION_MODS_TAP_KEY(MOD_RALT, KC_BSLASH),
+    [31] = ACTION_MODS_TAP_KEY(MOD_RSFT, KC_BSLASH),
 };
