@@ -373,7 +373,7 @@ enum macro_id {
 /*
  * Fn action definition
  */
-static const uint16_t PROGMEM fn_actions[] = {
+static const action_t PROGMEM fn_actions[] = {
     ACTION_LAYER_SET(0, ON_PRESS),                  // FN0 - reset layer to just 0
     ACTION_LAYER_TAP_TOGGLE(LAYER_BLUESHIFT),       // FN1 - switch to BlueShift
     ACTION_LAYER_TAP_TOGGLE(7),                     // FN2 - movement tap/toggle
@@ -430,8 +430,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     // print("id  = "); phex(id); print("\n");
     // print("opt = "); phex(opt); print("\n");
     if (id == PLOVER_SWITCH) {
-        action_t action = { .code = ACTION_NO };
-        action.code = ACTION_KEY((layer_state & 1<<LAYER_PLOVER) ? KC_F23 : KC_F24);
+        action_t action = ACTION_KEY((layer_state & 1<<LAYER_PLOVER) ? KC_F23 : KC_F24);
         if (!event.pressed) {
             uint8_t savedmods = get_mods();
             uint8_t shiftpressed = (savedmods & (MOD_LSFT | MOD_RSFT));
@@ -442,7 +441,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
             }
             //clear_mods();
         }
-        if (action.code != ACTION_NO) {
+        if (action.code != (action_t)ACTION_NO.code) {
             simon_hotkey(record, action);
         }
     }
@@ -450,21 +449,21 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
         uint8_t col = event.key.col;
         uint8_t row = event.key.row;
 
-        action_t action = { .code = ACTION_NO };
+        action_t action = ACTION_NO;
 
         if (col == 3 && row == 1) { // :
-            action.code = ACTION_MODS_KEY(MOD_LSFT, KC_SCLN);
+            action = (action_t)ACTION_MODS_KEY(MOD_LSFT, KC_SCLN);
         }
         else if (col == 3 && row == 2) { // Q
-            action.code = ACTION_MODS_KEY(MOD_LALT, KC_F4);
+            action = (action_t)ACTION_MODS_KEY(MOD_LALT, KC_F4);
         }
         else if (col == 3 && row == 10) { // W
-            action.code = ACTION_MODS_KEY(MOD_LALT, KC_F4);
+            action = (action_t)ACTION_MODS_KEY(MOD_LALT, KC_F4);
         }
         else if (col == 4 && row == 12) { // Alt+tab
-            action.code = ACTION_MODS_KEY(MOD_LALT, KC_TAB);
+            action = (action_t)ACTION_MODS_KEY(MOD_LALT, KC_TAB);
         }
-        if (action.code != ACTION_NO) {
+        if (action.code != (action_t)ACTION_NO.code) {
             simon_hotkey(record, action);
         }
         else if (!event.pressed) {
@@ -479,7 +478,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
         uint8_t shiftpressed = (savedmods & (MOD_LSFT | MOD_RSFT));
         uint8_t othermodspressed = (savedmods & (MOD_LGUI | MOD_RGUI | MOD_LCTL | MOD_RCTL | MOD_LALT | MOD_RALT ));
 
-        action_t action = { .code = ACTION_NO };
+        action_t action = ACTION_NO;
         uint8_t keycode = KC_NO;
 
         if (col == 0) { // Number row
@@ -534,9 +533,9 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
             }
         }
         if (keycode != KC_NO) {
-            action.code = ACTION_MODS_KEY(MOD_LSFT, keycode);
+            action = (action_t)ACTION_MODS_KEY(MOD_LSFT, keycode);
         }
-        if (action.code != ACTION_NO) {
+        if (action.code != (action_t)ACTION_NO.code) {
             if (othermodspressed) {
                 action.key.mods = 0;
             }
