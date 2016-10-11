@@ -41,7 +41,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              FN3, F,   G,   C,   R,   L,   MNXT,
                   D,   H,   T,   N,   S,   RSFT,
              DEL, B,   M,   W,   V,   Z,   RCTL,
-                       SPC, RALT,APP, FN8,FN2,
+                       SPC, RALT,APP, FN8, FN2,
         F13, MPLY,
         F14,
         ENT, FN1, SPC
@@ -371,12 +371,12 @@ enum macro_id {
 };
 
 /*
- * Fn action definition
+ * Fn action definition (limited to 32)
  */
 static const action_t PROGMEM fn_actions[] = {
     ACTION_LAYER_SET(0, ON_PRESS),                  // FN0 - reset layer to just 0
     ACTION_LAYER_TAP_TOGGLE(LAYER_BLUESHIFT),       // FN1 - switch to BlueShift
-    ACTION_LAYER_TAP_TOGGLE(7),                     // FN2 - movement tap/toggle
+    ACTION_LAYER_TAP_KEY(7, KC_F21),                // FN2 - movement layer, also desktop switcher
     ACTION_LAYER_TAP_TOGGLE(LAYER_NUMPAD),          // FN3 - numpad
     ACTION_FUNCTION(UNUSED),                        // ** FN4 - unused
     ACTION_FUNCTION(PLOVER_SWITCH),                 // FN5 - toggle Plover
