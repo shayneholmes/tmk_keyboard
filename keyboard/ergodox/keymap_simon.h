@@ -523,10 +523,10 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
                     keycode = KC_GRV;
                     break;
                 case 2:
-                    keycode = KC_LBRC;
+                    keycode = KC_MINS; // Left brace in Dvorak
                     break;
                 case 3:
-                    keycode = KC_RBRC;
+                    keycode = KC_EQL; // Right brace in Dvorak
                     break;
                 default:
                     break;
