@@ -26,21 +26,21 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // BASE LAYERS
 
-    KEYMAP(  // layer 0: customized dvorak with symbol row switched
+    KEYMAP(  // layer 0: customized qwerty with symbol row switched
         // left hand
         ESC, FN12,FN12,FN12,FN12,FN12,F17,
-        TAB, QUOT,COMM,DOT, P,   Y,   FN2,
-        LSFT,A,   O,   E,   U,   I,
-        LCTL,SCLN,Q,   J,   K,   X,   DEL,
+        TAB, Q,   W,   E,   R,   T,   FN2,
+        LSFT,A,   S,   D,   F,   G,
+        LCTL,Z,   X,   C,   V,   B,   DEL,
         FN3, FN1, LCTL,LALT,LGUI,
                                       FN5, F15,
                                            F16,
                                  BSPC,LSFT,LGUI,
         // right hand
              F18, FN12,FN12,FN12,FN12,FN12,MPLY,
-             FN3, F,   G,   C,   R,   L,   MNXT,
-                  D,   H,   T,   N,   S,   RSFT,
-             DEL, B,   M,   W,   V,   Z,   RCTL,
+             FN3, Y,   U,   I,   O,   P,   MNXT,
+                  H,   J,   K,   L,   SCLN,RSFT,
+             DEL, N,   M,   COMM,DOT, SLSH,RCTL,
                        SPC, RALT,APP, FN8, FN2,
         F13, MPLY,
         F14,
