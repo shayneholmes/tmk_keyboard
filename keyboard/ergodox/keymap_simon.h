@@ -204,7 +204,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         FN0, F1,  F2,  F3,  F4,  F5,  F6,
         TRNS,FN12,FN12,FN12,PSCR,BSLS,TRNS,  // the FN12 entries are for tilde and inverted brace/bracket keys
-        TRNS,APP, TAB, EQL, TRNS,INS, 
+        TRNS,APP, TAB, EQL, QUOT,INS,
         TRNS,TRNS,FN8, TRNS,CAPS,TRNS,TRNS,  // quit (alt+f4)
         FN13,TRNS,TRNS,TRNS,TRNS,
                                       TRNS,TRNS,
@@ -212,8 +212,8 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                  TRNS,TRNS,TRNS,
         // right hand
              F7,  F8,  F9,  F10, F11, F12, TRNS,
-             TRNS,PGUP,HOME,UP,  END, SLSH,TRNS,
-                  PGDN,LEFT,DOWN,RGHT,MINS,TRNS,
+             TRNS,PGUP,HOME,UP,  END, LBRC,TRNS,
+                  PGDN,LEFT,DOWN,RGHT,QUOT,TRNS,
              TRNS,TRNS,NO,  UP,  NO,  TRNS,TRNS,
                        LEFT,DOWN,RGHT,TRNS,TRNS,
         TRNS,TRNS,
