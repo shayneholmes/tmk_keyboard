@@ -28,9 +28,9 @@ Copyright 2016 Jun Wako <wakojun@gmail.com>
 |-----------------------------------------------------------| `-----------' |---------------|
 |CapsL |  A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '|  #|Entr|               |  4|  5|  6|KP,|
 |-----------------------------------------------------------|     ,---.     |---------------|
-|Shft|  <|  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /| RO|Shift |     |Up |     |  1|  2|  3|KP=|
+|Shft|  <|  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /| RO|Shift |     |Up |     |  1|  2|  3|Ent|
 |-----------------------------------------------------------| ,-----------. |---------------|
-|Ctl|Gui|Alt|MHEN|     Space      |HENK|KANA|Alt|Gui|App|Ctl| |Lef|Dow|Rig| |  0    |  .|Ent|
+|Ctl|Gui|Alt|MHEN|     Space      |HENK|KANA|Alt|Gui|App|Ctl| |Lef|Dow|Rig| |  0    |  .|KP=|
 `-----------------------------------------------------------' `-----------' `---------------'
 App:         Windows Menu key
 Gui:         Windows key, Mac ⌘ key or Meta key
@@ -52,8 +52,8 @@ https://en.wikipedia.org/wiki/Keyboard_layout#Hangul_.28for_Korean.29
     K35,K1E,K1F,K20,K21,K22,K23,K24,K25,K26,K27,K2D,K2E,K74,K2A,  K49,K4A,K4B,  K53,K54,K55,K56, \
     K2B,K14,K1A,K08,K15,K17,K1C,K18,K0C,K12,K13,K2F,K30,    K31,  K4C,K4D,K4E,  K5F,K60,K61,K57, \
     K39,K04,K16,K07,K09,K0A,K0B,K0D,K0E,K0F,K33,K34,    K32,K28,                K5C,K5D,K5E,K66, \
-    K79,K64,K1D,K1B,K06,K19,K05,K11,K10,K36,K37,K38,    K75,K7D,      K52,      K59,K5A,K5B,K67, \
-    K78,K7B,K7A,K77,        K2C,        K76,K00,K7E,K7F,K65,K7C,  K50,K51,K4F,  K62,    K63,K58  \
+    K79,K64,K1D,K1B,K06,K19,K05,K11,K10,K36,K37,K38,    K75,K7D,      K52,      K59,K5A,K5B,K58, \
+    K78,K7B,K7A,K77,        K2C,        K76,K00,K7E,K7F,K65,K7C,  K50,K51,K4F,      K62,K63,K67  \
 ) { \
     { AC_##K00, AC_##K01, AC_##K02, AC_##K03, AC_##K04, AC_##K05, AC_##K06, AC_##K07,   /* 00-07 */ \
       AC_##K08, AC_##K09, AC_##K0A, AC_##K0B, AC_##K0C, AC_##K0D, AC_##K0E, AC_##K0F }, /* 08-0F */ \
@@ -207,5 +207,66 @@ enum unimap_position_codes {
     UNIMAP_RGUI,            // 0x7F
     UNIMAP_NO,              // 0x80
 };
+
+/*
+ * Short names
+ */
+#define UNIMAP_LCTL UNIMAP_LCTRL
+#define UNIMAP_RCTL UNIMAP_RCTRL
+#define UNIMAP_LSFT UNIMAP_LSHIFT
+#define UNIMAP_RSFT UNIMAP_RSHIFT
+#define UNIMAP_ESC  UNIMAP_ESCAPE
+#define UNIMAP_BSPC UNIMAP_BSPACE
+#define UNIMAP_ENT  UNIMAP_ENTER
+#define UNIMAP_DEL  UNIMAP_DELETE
+#define UNIMAP_INS  UNIMAP_INSERT
+#define UNIMAP_CAPS UNIMAP_CAPSLOCK
+#define UNIMAP_CLCK UNIMAP_CAPSLOCK
+#define UNIMAP_RGHT UNIMAP_RIGHT
+#define UNIMAP_PGDN UNIMAP_PGDOWN
+#define UNIMAP_PSCR UNIMAP_PSCREEN
+#define UNIMAP_SLCK UNIMAP_SCROLLLOCK
+#define UNIMAP_PAUS UNIMAP_PAUSE
+#define UNIMAP_BRK  UNIMAP_PAUSE
+#define UNIMAP_NLCK UNIMAP_NUMLOCK
+#define UNIMAP_SPC  UNIMAP_SPACE
+#define UNIMAP_MINS UNIMAP_MINUS
+#define UNIMAP_EQL  UNIMAP_EQUAL
+#define UNIMAP_GRV  UNIMAP_GRAVE
+#define UNIMAP_RBRC UNIMAP_RBRACKET
+#define UNIMAP_LBRC UNIMAP_LBRACKET
+#define UNIMAP_COMM UNIMAP_COMMA
+#define UNIMAP_BSLS UNIMAP_BSLASH
+#define UNIMAP_SLSH UNIMAP_SLASH
+#define UNIMAP_SCLN UNIMAP_SCOLON
+#define UNIMAP_QUOT UNIMAP_QUOTE
+#define UNIMAP_APP  UNIMAP_APPLICATION
+#define UNIMAP_NUHS UNIMAP_NONUS_HASH
+#define UNIMAP_NUBS UNIMAP_NONUS_BSLASH
+/* Japanese specific */
+#define UNIMAP_ZKHK UNIMAP_GRAVE
+/* Keypad */
+#define UNIMAP_P1   UNIMAP_KP_1
+#define UNIMAP_P2   UNIMAP_KP_2
+#define UNIMAP_P3   UNIMAP_KP_3
+#define UNIMAP_P4   UNIMAP_KP_4
+#define UNIMAP_P5   UNIMAP_KP_5
+#define UNIMAP_P6   UNIMAP_KP_6
+#define UNIMAP_P7   UNIMAP_KP_7
+#define UNIMAP_P8   UNIMAP_KP_8
+#define UNIMAP_P9   UNIMAP_KP_9
+#define UNIMAP_P0   UNIMAP_KP_0
+#define UNIMAP_PDOT UNIMAP_KP_DOT
+#define UNIMAP_PCMM UNIMAP_KP_COMMA
+#define UNIMAP_PSLS UNIMAP_KP_SLASH
+#define UNIMAP_PAST UNIMAP_KP_ASTERISK
+#define UNIMAP_PMNS UNIMAP_KP_MINUS
+#define UNIMAP_PPLS UNIMAP_KP_PLUS
+#define UNIMAP_PEQL UNIMAP_KP_EQUAL
+#define UNIMAP_PENT UNIMAP_KP_ENTER
+/* Consumer Page */
+#define UNIMAP_MUTE UNIMAP_VOLUME_MUTE
+#define UNIMAP_VOLU UNIMAP_VOLUME_UP
+#define UNIMAP_VOLD UNIMAP_VOLUME_DOWN
 
 #endif
